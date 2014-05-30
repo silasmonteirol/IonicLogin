@@ -1,12 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.ionicframework.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>StarterApp</name>
+    <name>Ionic Login Example</name>
     <description>
-        A sample Ionic Framework app using Cordova and AngularJS
+        Um Exemplo de Login usando o Parse com o IONIC
     </description>
-    <author email="support@drifty.com" href="http://ionicframework.com/">
-        Ionic Framework Team
-    </author>
+    <author email="contato@silaslimeira.com" href="http://silaslimeira.com/"></author>
     <content src="index.html" />
     <access origin="*" />
     <preference name="fullscreen" value="true" />

@@ -1,69 +1,142 @@
-// Ionic Starter App
-
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'starter.services' is found in services.js
-// 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.services', 'starter.controllers'])
-
-
+angular.module('ionicApp', ['ionic'])
+//Rotas de Templates
 .config(function($stateProvider, $urlRouterProvider) {
 
-  // Ionic uses AngularUI Router which uses the concept of states
-  // Learn more here: https://github.com/angular-ui/ui-router
-  // Set up the various states which the app can be in.
-  // Each state's controller can be found in controllers.js
   $stateProvider
-
-    // setup an abstract state for the tabs directive
-    .state('tab', {
+    .state('signin', {
+      url: "/sign-in",
+      templateUrl: "sign-in.html",
+      controller: 'SignInCtrl'
+    })
+    .state('forgotpassword', {
+      url: "/forgot-password",
+      templateUrl: "forgot-password.html",
+		controller: 'RedefinirCtrl'
+    })
+  .state('tabs', {
       url: "/tab",
       abstract: true,
-      templateUrl: "templates/tabs.html"
+      templateUrl: "tabs.html"
     })
-
-    // the pet tab has its own child nav-view and history
-    .state('tab.pet-index', {
-      url: '/pets',
+    .state('tabs.home', {
+      url: "/home",
       views: {
-        'pets-tab': {
-          templateUrl: 'templates/pet-index.html',
-          controller: 'PetIndexCtrl'
+        'home-tab': {
+          templateUrl: "home.html"
         }
       }
     })
-
-    .state('tab.pet-detail', {
-      url: '/pet/:petId',
+    .state('tabs.cadastrar', {
+      url: "/cadastrar",
       views: {
-        'pets-tab': {
-          templateUrl: 'templates/pet-detail.html',
-          controller: 'PetDetailCtrl'
+        'home-tab': {
+          templateUrl: "cadastrar.html"
         }
       }
-    })
-
-    .state('tab.adopt', {
-      url: '/adopt',
-      views: {
-        'adopt-tab': {
-          templateUrl: 'templates/adopt.html'
-        }
-      }
-    })
-
-    .state('tab.about', {
-      url: '/about',
+    }) 
+    .state('tabs.about', {
+      url: "/about",
       views: {
         'about-tab': {
-          templateUrl: 'templates/about.html'
+          templateUrl: "about.html"
         }
       }
-    });
+    })
+    //Define que qualquer url inexistente irá para o login;
+   $urlRouterProvider.otherwise("/sign-in");
+})
+//Iniciando os controllers
 
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/pets');
+//Controller do Login
+.controller('SignInCtrl', function($scope, $state) {
+	//Application ID PARSE na primeira linha;
+  //JAVASCRIPT ID PARSE na segunda linha;
+	Parse.initialize("",
+                "");
+    window.addEventListener("load",initApp);
+	function initApp(){
+		document.getElementById("logar").addEventListener("click", login);
+	}
+	function login(){
+        user = document.getElementById('usuario').value;
+        senha = document.getElementById('senha').value;
+        Parse.User.logIn(user, senha, {
+          success: function(user) {
+               $state.go('tabs.home');
+          },
+          error: function(user, error) {
+            confirm('Email ou Senha incorretos, por favor tente novamente!');
+          }
+        });
+    }
+})
+//Controller do Cadastro
+.controller('CadastroCtrl', function($scope, $state) {
+	//Application ID PARSE na primeira linha;
+  //JAVASCRIPT ID PARSE na segunda linha;
+	Parse.initialize("",
+                "");
 
-});
+	window.addEventListener("load",initApp);
 
+	function initApp(){
+		document.getElementById("cadastroMorador").addEventListener("submit",salvarNaNuvem);
+	}
+
+	function salvarNaNuvem(evento){
+		var nomeMorador = document.getElementById('nomeMorador');
+		var telefone = document.getElementById('telefone');
+		var dataNascimento = document.getElementById('dataNascimento');
+		var email = document.getElementById('email');
+		var username = document.getElementById('username');
+		var condominio = document.getElementById('condominio');
+		var apartamento = document.getElementById('apartamento');
+		var password = document.getElementById('password');
+		
+		evento.preventDefault();
+
+		var user = new Parse.User();
+
+		var moradorForm = {};
+		
+		moradorForm.condominio = condominio.value;
+		moradorForm.apartamento = apartamento.value;
+		moradorForm.nome = nomeMorador.value;
+		moradorForm.telefone = telefone.value;
+		moradorForm.nascimento = dataNascimento.value;
+		moradorForm.email = email.value;
+		moradorForm.username = username.value;
+		moradorForm.password = password.value;
+
+		user.save(moradorForm,{
+			success:function(user){
+				confirm('Morador Cadastrado com Sucesso!');
+			}, 
+			error: function(user, error){
+				confirm('ERRO!');
+			}
+		});
+	}
+})
+//Controler Redefinir a senha
+.controller('RedefinirCtrl', function($scope, $state) {
+//Application ID PARSE na primeira linha;
+  //JAVASCRIPT ID PARSE na segunda linha;
+Parse.initialize("",
+                "");
+    window.addEventListener("load",initApp);
+	function initApp(){
+		document.getElementById("reset").addEventListener("click", reset);
+	}
+	function reset(){
+        email = document.getElementById('email').value;
+        Parse.User.requestPasswordReset(email, {
+          success: function() {
+            confirm('Foi enviado um email para: '+email+'/n Verifique seu email e redifina a senha!');
+          },
+          error: function(error) {
+            confirm('Aconteceu algum erro, entre em contato com o desenvolvedor!');
+          }
+        });
+    }
+})
