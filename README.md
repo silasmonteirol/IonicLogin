@@ -1,6 +1,6 @@
-ionic-angular-cordova-seed
+Ionic Login com Parse Example
 ==========================
 
-The perfect starting point for an Ionic project.
 
-- [Ionic Tutorials](http://ionicframework.com/tutorials/)
+- [Ionic Tutoriais](http://ionicframework.com/tutorials/);
+- [Documentação Parse](https://www.parse.com/docs/);
